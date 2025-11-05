@@ -14,6 +14,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "chefDetailsServlet", urlPatterns = "/chefDetails")
 public class ChefDetailsServlet extends HttpServlet {
@@ -33,14 +35,21 @@ public class ChefDetailsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+
         Long chefId = Long.valueOf(req.getParameter("chefId"));
         String dishId = req.getParameter("dishId");
+        String action = req.getParameter("action");
 
         Chef chef = chefService.findById(chefId);
-        Dish dish = dishService.findByDishId(dishId);
 
-        chef.getDishes().add(dish);
+        if ("delete".equals(action)) {
+            Dish dish = dishService.findByDishId(dishId);
+            chef.getDishes().remove(dish);
+        } else {
 
+            Dish dish = dishService.findByDishId(dishId);
+            chef.getDishes().add(dish);
+        }
 
         var webExchange = JakartaServletWebApplication.buildApplication(getServletContext())
                 .buildExchange(req, resp);

@@ -31,20 +31,27 @@
     <h2 th:text="'Bio: ' + ${chef.bio}"></h2>
 </header>
 <section>
-
     <h2>Dishes prepared by this chef:</h2>
     <ul>
-        <li th:each="dish : ${chef.dishes}"
-            th:text="${dish.name}">
+        <li th:each="dish : ${chef.dishes}">
+            <span th:text="${dish.name}"></span>
+
+            <form action="/chefDetails" method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="chefId" th:value="${chef.id}">
+                <input type="hidden" name="dishId" th:value="${dish.dishId}">
+                <button type="submit"
+                        style="margin-left:10px; background-color:#ff4d4d; color:white;
+                               border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">
+                    Delete
+                </button>
+            </form>
         </li>
     </ul>
-    <form action="/chefDetails" method="POST">
-        <input type="hidden" name="chefId" th:value="${chef.id}">
-        <input type="radio" name="dishId" th:each="dish : ${dishes}"
-               th:value="${dish.dishId}"
-               th:text="${dish.name}"> <br/>
-    </form>
+
+
 
 </section>
+
 </body>
 </html>

@@ -41,4 +41,11 @@ public class ChefServiceImpl implements ChefService {
         return chefRepository.save(chef);
 
     }
+
+    public Chef deleteDish(Long chefId,String dishId) {
+        Chef chef = chefRepository.findById(chefId).orElseThrow();
+        Dish dish = dishRepository.findByDishId(dishId);
+        chef.getDishes().remove(dish);
+        return chefRepository.save(chef);
+    }
 }

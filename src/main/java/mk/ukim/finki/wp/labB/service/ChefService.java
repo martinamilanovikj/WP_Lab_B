@@ -8,4 +8,7 @@ public interface ChefService {
     List<Chef> listChefs();
     Chef findById(Long id);
     Chef addDishToChef(Long chefId, String dishId);
+    Chef deleteDish(Long chefId, String dishId);
+
+
 }
