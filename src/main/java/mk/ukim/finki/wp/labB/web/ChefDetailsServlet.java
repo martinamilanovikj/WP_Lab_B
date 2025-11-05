@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.labB.web;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -49,13 +50,21 @@ public class ChefDetailsServlet extends HttpServlet {
 
             Dish dish = dishService.findByDishId(dishId);
             chef.getDishes().add(dish);
+
+            ServletContext context = getServletContext();
+            Integer totalAdded = (Integer) context.getAttribute("totalDishesAdded");
+            if (totalAdded == null) totalAdded = 0;
+            context.setAttribute("totalDishesAdded", totalAdded + 1);
         }
+
+
 
         var webExchange = JakartaServletWebApplication.buildApplication(getServletContext())
                 .buildExchange(req, resp);
 
         WebContext context = new WebContext(webExchange);
         context.setVariable("chef", chef);
+        context.setVariable("totalDishesAdded", getServletContext().getAttribute("totalDishesAdded"));
 
         templateEngine.process("chefDetails.html", context, resp.getWriter());
     }
